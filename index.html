@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Vue MQTT Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <script src="https://unpkg.com/mqtt/dist/mqtt.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body class="bg-indigo-darker">
+    <div id="app">
+      <h1
+        class="sticky pin-t text-center text-indigo-dark py-3 bg-indigo-lightest"
+      >
+        Vue MQTT Client
+        <div
+          :class="`flex justify-center items-center mt-3 mr-3 absolute pin-t pin-r rounded-full h-8 w-8 ${connected ? 'bg-green-light': 'bg-red-light'} `"
+        >
+          <!-- <span v-if="error" class="cursor-pointer font-bold text-orange-darker">!</span> -->
+        </div>
+      </h1>
+
+      <div
+        class="container bg-indigo-lightest text-indigo-dark mx-auto mt-2 rounded px-5 py-5"
+      >
+        <div class="bg-indigo-lightest sticky pin-t">
+          <form
+            class="w-full"
+            @submit.prevent="connect"
+          >
+            <div class="flex flex-wrap -mx-3 mb-6">
+              <div class="w-full md:w-2/5 px-3 mb-6 md:mb-0">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="grid-first-name"
+                >
+                  URL
+                </label>
+                <input
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-indigo rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  id="grid-first-name"
+                  type="text"
+                  placeholder="ws://localhost:1884"
+                  v-model="url"
+                />
+              </div>
+              <div class="w-full md:w-2/5 px-3">
+                <label
+                  class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  for="grid-last-name"
+                >
+                  Tópico
+                </label>
+                <input
+                  class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-indigo rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-grey"
+                  id="grid-last-name"
+                  type="text"
+                  placeholder="nome/topico/mqtt"
+                  v-model="topic"
+                />
+              </div>
+              <div class="w-full md:w-1/5 px-3 my-auto ">
+                <button
+                  class="justify-center mt-2 bg-indigo hover:bg-blue-dark text-white font-bold py-2 px-4 rounded"
+                >
+                  Conectar
+                </button>
+              </div>
+            </div>
+          </form>
+
+        <form v-if="connected" class="w-full" @submit.prevent="publish">
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-first-name">
+                        Content
+                    </label>
+                    <textarea
+                        class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-indigo rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        id="grid-first-name" type="text" placeholder="ws://localhost:1884" v-model="content" ></textarea>
+                </div>
+                <div class="w-full md:w-1/5 px-3 my-auto ">
+                    <button class="justify-center mt-2 bg-indigo hover:bg-blue-dark text-white font-bold py-2 px-4 rounded">
+                        Publish
+                    </button>
+                </div>
+            </div>
+        </form>
+        </div>
+        <div>
+          <h3 class="text-center">Messages</h3>
+          <ul class="border border-indigo-light rounded-sm shadow">
+            <li class="my-2" v-for="message in messages" :key="message.num">
+              {{ message.content }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
